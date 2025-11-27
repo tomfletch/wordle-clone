@@ -4,6 +4,7 @@ import { useAnimationTimer } from "../../hooks/useAnimationTimer";
 import { useEnter } from "../../hooks/useEnter";
 import { useWordleGame } from "../../hooks/useWordleGame";
 import type { GameResult } from "../../types/GameResult";
+import { Keyboard } from "../Keyboard/Keyboard";
 import { WordleLine } from "../WordleLine/WordleLine";
 import styles from "./WordleGame.module.css";
 
@@ -84,6 +85,7 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
   return (
     <div className={styles.wordle}>
       {Array.from({ length: MAX_GUESSES }, (_, index) => renderLine(index))}
+      <Keyboard />
     </div>
   );
 };

@@ -1,7 +1,7 @@
-import { useKeyboard } from "./useKeyboard";
+import { useInput } from "./useInput";
 
 export const useEnter = (onEnter: () => void) => {
-  useKeyboard((key) => {
+  useInput((key) => {
     if (key === "Enter") {
       onEnter();
     }

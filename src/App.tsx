@@ -1,8 +1,13 @@
 import "./App.css";
 import { Wordle } from "./components/Wordle/Wordle";
+import { InputControllerProvider } from "./context/InputController/InputControllerProvider";
 
 function App() {
-  return <Wordle />;
+  return (
+    <InputControllerProvider>
+      <Wordle />
+    </InputControllerProvider>
+  );
 }
 
 export default App;

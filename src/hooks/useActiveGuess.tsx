@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useKeyboard } from "./useKeyboard";
+import { useInput } from "./useInput";
 
 export const useActiveGuess = ({
   wordLength,
@@ -10,7 +10,7 @@ export const useActiveGuess = ({
 }) => {
   const [activeGuess, setActiveGuess] = useState("");
 
-  useKeyboard((key) => {
+  useInput((key) => {
     if (!isEnabled) return;
     if (key.match(/^[a-zA-Z]$/) && activeGuess.length < wordLength) {
       setActiveGuess((prev) => prev + key.toLowerCase());

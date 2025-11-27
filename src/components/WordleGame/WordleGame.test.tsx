@@ -153,4 +153,28 @@ describe("WordleGame", () => {
     expect(onGameOverFn).toHaveBeenCalledTimes(1);
     expect(onGameOverFn).toHaveBeenCalledWith({ didWin: true, attempts: 4 });
   });
+
+  it("renders the Keyboard component", () => {
+    render(<WordleGame onGameOver={() => {}} />);
+    expect(screen.getByText("A")).toBeInTheDocument();
+    expect(screen.getByText("ENTER")).toBeInTheDocument();
+    expect(screen.getByText("⌫")).toBeInTheDocument();
+  });
+
+  it("handles key presses from the Keyboard component", async () => {
+    const { user } = render(<WordleGame onGameOver={() => {}} />);
+
+    const lines = screen.getAllByTestId("line");
+    expect(lines[0]).toHaveTextContent("");
+
+    // Press keys using the on-screen keyboard
+    const guess = "hello";
+
+    for (const letter of guess) {
+      const key = screen.getByRole("button", { name: letter.toUpperCase() });
+      await user.click(key);
+    }
+
+    expect(lines[0]).toHaveTextContent("hello");
+  });
 });
