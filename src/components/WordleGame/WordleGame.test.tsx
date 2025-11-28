@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../../../test/render";
 import { WordleGame } from "./WordleGame";
@@ -134,8 +134,10 @@ describe("WordleGame", () => {
       vi.runAllTimers();
     }
 
-    expect(onGameOverFn).toHaveBeenCalledTimes(1);
-    expect(onGameOverFn).toHaveBeenCalledWith({ didWin: false });
+    await waitFor(() => {
+      expect(onGameOverFn).toHaveBeenCalledTimes(1);
+      expect(onGameOverFn).toHaveBeenCalledWith({ didWin: false });
+    });
   });
 
   it("calls onGameOver when the game is won on first attempt", async () => {
@@ -145,9 +147,12 @@ describe("WordleGame", () => {
     // Make the correct guess to win the game
     await user.keyboard("zebra");
     await user.keyboard("{Enter}");
+    vi.runAllTimers();
 
-    expect(onGameOverFn).toHaveBeenCalledTimes(1);
-    expect(onGameOverFn).toHaveBeenCalledWith({ didWin: true, attempts: 1 });
+    await waitFor(() => {
+      expect(onGameOverFn).toHaveBeenCalledTimes(1);
+      expect(onGameOverFn).toHaveBeenCalledWith({ didWin: true, attempts: 1 });
+    });
   });
 
   it("calls onGameOver when the game is won on later attempt", async () => {
@@ -162,8 +167,10 @@ describe("WordleGame", () => {
       vi.runAllTimers();
     }
 
-    expect(onGameOverFn).toHaveBeenCalledTimes(1);
-    expect(onGameOverFn).toHaveBeenCalledWith({ didWin: true, attempts: 4 });
+    await waitFor(() => {
+      expect(onGameOverFn).toHaveBeenCalledTimes(1);
+      expect(onGameOverFn).toHaveBeenCalledWith({ didWin: true, attempts: 4 });
+    });
   });
 
   it("renders the Keyboard component", () => {

@@ -4,10 +4,13 @@ export const useAnimationTimer = (duration: number) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const timerRef = useRef<number | null>(null);
 
-  const startAnimation = () => {
+  const startAnimation = (callback?: () => void) => {
     setIsAnimating(true);
 
-    timerRef.current = setTimeout(() => setIsAnimating(false), duration);
+    timerRef.current = setTimeout(() => {
+      callback?.();
+      setIsAnimating(false);
+    }, duration);
   };
 
   useEffect(() => {

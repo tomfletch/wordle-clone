@@ -8,6 +8,7 @@ type WordleLineProps = {
   isInactive?: boolean;
   isInvalid?: boolean;
   isShaking?: boolean;
+  isJumping?: boolean;
   score?: LetterScore[];
 };
 
@@ -17,6 +18,7 @@ export const WordleLine = ({
   score,
   isInactive = false,
   isShaking = false,
+  isJumping = false,
 }: WordleLineProps) => {
   return (
     <div
@@ -24,6 +26,7 @@ export const WordleLine = ({
       className={styles.line}
       data-inactive={isInactive}
       data-shake={isShaking}
+      data-jump={isJumping}
     >
       {Array.from({ length }).map((_, index) => {
         const letter = value?.[index] ?? "";

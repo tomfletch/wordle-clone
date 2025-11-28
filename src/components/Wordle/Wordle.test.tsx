@@ -35,7 +35,7 @@ describe("Wordle", () => {
       vi.runAllTimers();
     }
 
-    expect(screen.getByText("Game Over")).toBeInTheDocument();
+    expect(await screen.findByText("Game Over")).toBeInTheDocument();
   });
 
   it("shows win screen after winning on first attempt", async () => {
@@ -43,8 +43,9 @@ describe("Wordle", () => {
 
     await user.keyboard("zebra");
     await user.keyboard("{Enter}");
+    vi.runAllTimers();
 
-    expect(screen.getByText("Genius!")).toBeInTheDocument();
+    expect(await screen.findByText("Genius!")).toBeInTheDocument();
     expect(screen.getByText("You won in 1 attempt!")).toBeInTheDocument();
   });
 
@@ -59,7 +60,7 @@ describe("Wordle", () => {
       vi.runAllTimers();
     }
 
-    expect(screen.getByText("Phew!")).toBeInTheDocument();
+    expect(await screen.findByText("Phew!")).toBeInTheDocument();
     expect(screen.getByText("You won in 6 attempts!")).toBeInTheDocument();
   });
 });

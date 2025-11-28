@@ -1,6 +1,6 @@
-import { dictionary } from "../dictionary";
+import { ANSWERS } from "../data/answers";
 
 export const getRandomAnswer = (): string => {
-  const answers = [...dictionary];
+  const answers = [...ANSWERS];
   return answers[Math.floor(Math.random() * answers.length)];
 };

@@ -17,6 +17,7 @@
   transition-delay: calc((sibling-index() - 1) * 100ms);
   position: relative;
   transform-style: preserve-3d;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .letter:before,
@@ -79,6 +80,23 @@
   80% {
     transform: translateX(10px);
     color: red;
+  }
+}
+
+.line[data-jump="true"] .letter {
+  animation: jump 0.5s ease-in-out;
+  animation-delay: calc((sibling-index() - 1) * 100ms);
+}
+
+@keyframes jump {
+  0% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -30px;
+  }
+  100% {
+    translate: 0 0;
   }
 }
 

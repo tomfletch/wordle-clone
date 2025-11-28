@@ -12,10 +12,14 @@ import styles from "./WordleGame.module.css";
 const MAX_GUESSES = 6;
 const WORD_LENGTH = 5;
 
+const SHAKE_ANIMATION_DURATION = 600;
+
 const FLIP_LETTER_DELAY = 100;
 const FLIP_LETTER_DURATION = 1000;
 const FLIP_ANIMATION_DURATION =
   (WORD_LENGTH - 1) * FLIP_LETTER_DELAY + FLIP_LETTER_DURATION;
+
+const JUMP_ANIMATION_DURATION = 2000;
 
 type WordleGameProps = {
   onGameOver: (gameResult: GameResult) => void;
@@ -32,12 +36,15 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
     useWordleGame({ maxGuesses: MAX_GUESSES });
 
   const { isAnimating: isShaking, startAnimation: startShake } =
-    useAnimationTimer(500);
+    useAnimationTimer(SHAKE_ANIMATION_DURATION);
 
   const { isAnimating: isFlipping, startAnimation: startFlip } =
     useAnimationTimer(FLIP_ANIMATION_DURATION);
 
-  const canType = !isShaking && !isFlipping && !isGameOver;
+  const { isAnimating: isJumping, startAnimation: startJump } =
+    useAnimationTimer(JUMP_ANIMATION_DURATION);
+
+  const canType = !isShaking && !isFlipping && !isJumping && !isGameOver;
 
   const { activeGuess, clearActiveGuess } = useActiveGuess({
     wordLength: WORD_LENGTH,
@@ -48,7 +55,10 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
     if (!canType) return;
     const result = submitGuess(activeGuess);
 
-    if (result === "valid") {
+    if (result === "correct") {
+      clearActiveGuess();
+      startFlip(() => startJump());
+    } else if (result === "valid") {
       clearActiveGuess();
       startFlip();
     } else {
@@ -57,14 +67,14 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
   });
 
   useEffect(() => {
-    if (isGameOver) {
+    if (isGameOver && !isJumping && !isFlipping) {
       if (hasWon) {
         onGameOverRef.current({ didWin: true, attempts: pastGuesses.length });
       } else {
         onGameOverRef.current({ didWin: false });
       }
     }
-  }, [isGameOver, hasWon, pastGuesses.length]);
+  }, [isGameOver, hasWon, pastGuesses.length, isJumping, isFlipping]);
 
   const renderLine = (index: number) => {
     if (index < activeGuessIndex) {
@@ -76,6 +86,7 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
           value={guess}
           length={WORD_LENGTH}
           score={score}
+          isJumping={isJumping && index === activeGuessIndex - 1}
         />
       );
     } else if (index === activeGuessIndex) {
@@ -85,7 +96,7 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
           value={activeGuess}
           isShaking={isShaking}
           length={WORD_LENGTH}
-          isInactive={isFlipping}
+          isInactive={isFlipping || isJumping}
         />
       );
     } else {
@@ -93,9 +104,8 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
     }
   };
 
-  const letterScoreGuesses = isFlipping
-    ? pastGuesses.slice(0, -1)
-    : pastGuesses;
+  const letterScoreGuesses =
+    isFlipping || isJumping ? pastGuesses.slice(0, -1) : pastGuesses;
 
   const letterScores = getLetterScores(letterScoreGuesses);
 
