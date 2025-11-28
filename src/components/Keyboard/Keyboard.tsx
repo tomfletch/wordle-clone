@@ -1,4 +1,6 @@
 import { useInputController } from "../../context/InputController/useInputController";
+import type { LetterScore } from "../../types/LetterScore";
+import { letterScoreToDataScore } from "../../utils/letterScoreToDataScore";
 import styles from "./Keyboard.module.css";
 
 const ROWS = [
@@ -7,7 +9,11 @@ const ROWS = [
   ["Enter", ..."ZXCVBNM".split(""), "Backspace"],
 ];
 
-export const Keyboard = () => {
+type KeyboardProps = {
+  letterScores?: Record<string, LetterScore>;
+};
+
+export const Keyboard = ({ letterScores = {} }: KeyboardProps) => {
   const { pressKey } = useInputController();
 
   return (
@@ -24,6 +30,9 @@ export const Keyboard = () => {
                 minWidth:
                   key === "Enter" || key === "Backspace" ? "64px" : undefined,
               }}
+              data-score={letterScoreToDataScore(
+                letterScores[key.toLowerCase()]
+              )}
             >
               {key === "Backspace" ? "⌫" : key.toUpperCase()}
             </button>

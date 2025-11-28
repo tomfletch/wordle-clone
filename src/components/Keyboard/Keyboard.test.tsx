@@ -2,6 +2,7 @@ import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "../../../test/render";
 import { useInput } from "../../hooks/useInput";
+import { LETTER_SCORE } from "../../types/LetterScore";
 import { Keyboard } from "./Keyboard";
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -59,5 +60,27 @@ describe("Keyboard", () => {
     const button = screen.getByRole("button", { name: "Backspace" });
     await user.click(button);
     expect(callback).toHaveBeenCalledWith("Backspace");
+  });
+
+  it("applies correct attribute to 'almost' keys", () => {
+    render(<Keyboard letterScores={{ a: LETTER_SCORE.ALMOST }} />);
+
+    const almostKey = screen.getByRole("button", { name: "A" });
+
+    expect(almostKey).toHaveAttribute("data-score", "almost");
+  });
+
+  it("applies correct attribute to 'correct' keys", () => {
+    render(<Keyboard letterScores={{ b: LETTER_SCORE.CORRECT }} />);
+
+    const correctKey = screen.getByRole("button", { name: "B" });
+    expect(correctKey).toHaveAttribute("data-score", "correct");
+  });
+
+  it("applies correct attribute to 'incorrect' keys", () => {
+    render(<Keyboard letterScores={{ c: LETTER_SCORE.INCORRECT }} />);
+
+    const incorrectKey = screen.getByRole("button", { name: "C" });
+    expect(incorrectKey).toHaveAttribute("data-score", "incorrect");
   });
 });

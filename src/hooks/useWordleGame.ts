@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { dictionary } from "../dictionary";
+import type { LetterScore } from "../types/LetterScore";
 import { getRandomAnswer } from "../utils/getRandomAnswer";
-import { scoreGuess, validateGuess, type LetterScore } from "../wordle";
+import { scoreGuess, validateGuess } from "../wordle";
 
 const usePastGuesses = () => {
   const [pastGuesses, setGuesses] = useState<

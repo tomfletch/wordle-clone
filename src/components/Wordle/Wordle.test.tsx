@@ -1,5 +1,5 @@
 import { screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../../../test/render";
 import { Wordle } from "./Wordle";
 
@@ -8,6 +8,15 @@ vi.mock("../../utils/getRandomAnswer", () => ({
 }));
 
 describe("Wordle", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+  });
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
+  });
+
   it("initially renders a new game", () => {
     render(<Wordle />);
 
@@ -23,6 +32,7 @@ describe("Wordle", () => {
     for (const guess of guesses) {
       await user.keyboard(guess);
       await user.keyboard("{Enter}");
+      vi.runAllTimers();
     }
 
     expect(screen.getByText("Game Over")).toBeInTheDocument();
@@ -46,6 +56,7 @@ describe("Wordle", () => {
     for (const guess of guesses) {
       await user.keyboard(guess);
       await user.keyboard("{Enter}");
+      vi.runAllTimers();
     }
 
     expect(screen.getByText("Phew!")).toBeInTheDocument();

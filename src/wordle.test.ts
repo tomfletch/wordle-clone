@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { LETTER_SCORE, scoreGuess, validateGuess } from "./wordle";
+import { LETTER_SCORE } from "./types/LetterScore";
+import { scoreGuess, validateGuess } from "./wordle";
 
 describe("scoreGuess", () => {
   it("scores a guess with no correct letters", () => {

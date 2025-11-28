@@ -1,5 +1,5 @@
 import { screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "../../../test/render";
 import { WordleGame } from "./WordleGame";
 
@@ -8,6 +8,15 @@ vi.mock("../../utils/getRandomAnswer", () => ({
 }));
 
 describe("WordleGame", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+  });
+
+  afterEach(() => {
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
+  });
+
   it("renders six lines", () => {
     render(<WordleGame onGameOver={() => {}} />);
     expect(screen.getAllByTestId("line")).toHaveLength(6);
@@ -54,6 +63,7 @@ describe("WordleGame", () => {
 
     await user.keyboard("hello");
     await user.keyboard("{Enter}");
+    vi.runAllTimers();
 
     expect(lines[0]).toHaveTextContent("hello");
     expect(lines[1]).toHaveTextContent("");
@@ -121,6 +131,7 @@ describe("WordleGame", () => {
     for (const guess of guesses) {
       await user.keyboard(guess);
       await user.keyboard("{Enter}");
+      vi.runAllTimers();
     }
 
     expect(onGameOverFn).toHaveBeenCalledTimes(1);
@@ -148,6 +159,7 @@ describe("WordleGame", () => {
     for (const guess of guesses) {
       await user.keyboard(guess);
       await user.keyboard("{Enter}");
+      vi.runAllTimers();
     }
 
     expect(onGameOverFn).toHaveBeenCalledTimes(1);

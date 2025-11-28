@@ -1,10 +1,4 @@
-export const LETTER_SCORE = {
-  CORRECT: "C",
-  ALMOST: "A",
-  INCORRECT: "I",
-} as const;
-
-export type LetterScore = (typeof LETTER_SCORE)[keyof typeof LETTER_SCORE];
+import { LETTER_SCORE, type LetterScore } from "./types/LetterScore";
 
 export const scoreGuess = (guess: string, answer: string): LetterScore[] => {
   if (guess.length !== answer.length) {

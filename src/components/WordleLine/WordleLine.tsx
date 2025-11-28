@@ -1,4 +1,5 @@
-import { LETTER_SCORE, type LetterScore } from "../../wordle";
+import type { LetterScore } from "../../types/LetterScore";
+import { letterScoreToDataScore } from "../../utils/letterScoreToDataScore";
 import styles from "./WordleLine.module.css";
 
 type WordleLineProps = {
@@ -8,17 +9,6 @@ type WordleLineProps = {
   isInvalid?: boolean;
   isShaking?: boolean;
   score?: LetterScore[];
-};
-
-const LETTER_SCORE_TO_DATA_SCORE: Record<LetterScore, string> = {
-  [LETTER_SCORE.CORRECT]: "correct",
-  [LETTER_SCORE.ALMOST]: "almost",
-  [LETTER_SCORE.INCORRECT]: "incorrect",
-};
-
-const letterScoreToDataScore = (score: LetterScore | undefined) => {
-  if (score === undefined) return undefined;
-  return LETTER_SCORE_TO_DATA_SCORE[score];
 };
 
 export const WordleLine = ({
