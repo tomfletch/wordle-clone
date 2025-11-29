@@ -68,11 +68,11 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
 
   useEffect(() => {
     if (isGameOver && !isJumping && !isFlipping) {
-      if (hasWon) {
-        onGameOverRef.current({ didWin: true, attempts: pastGuesses.length });
-      } else {
-        onGameOverRef.current({ didWin: false });
-      }
+      const result: GameResult = hasWon
+        ? { didWin: true, attempts: pastGuesses.length }
+        : { didWin: false };
+
+      onGameOverRef.current(result);
     }
   }, [isGameOver, hasWon, pastGuesses.length, isJumping, isFlipping]);
 
