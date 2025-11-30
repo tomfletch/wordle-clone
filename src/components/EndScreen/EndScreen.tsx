@@ -1,4 +1,7 @@
+import { useAttemptDistribution } from "../../hooks/useAttemptDistribution";
 import type { GameResult } from "../../types/GameResult";
+import { Chart } from "../Chart/Chart";
+import styles from "./EndScreen.module.css";
 
 const WIN_WORDS = [
   "Genius",
@@ -18,10 +21,13 @@ export const EndScreen = ({
   gameResult: { didWin, attempts },
   onPlayAgain,
 }: EndScreenProps) => {
+  const { distribution } = useAttemptDistribution();
+
   return (
-    <div>
+    <div className={styles.endScreen}>
       {didWin ? <WinMessage attempts={attempts} /> : <LoseMessage />}
       <button onClick={() => onPlayAgain()}>Play Again</button>
+      <Chart data={distribution} />
     </div>
   );
 };

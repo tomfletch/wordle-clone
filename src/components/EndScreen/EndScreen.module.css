@@ -1,0 +1,11 @@
+.endScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.endScreen h2,
+.endScreen p {
+  margin: 0;
+}

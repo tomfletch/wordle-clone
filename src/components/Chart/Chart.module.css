@@ -1,0 +1,28 @@
+.chart {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30px;
+  height: 150px;
+}
+
+.barContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  border-bottom: 1px solid #888;
+  width: 100%;
+}
+
+.bar {
+  background-color: #6aaa64;
+  width: 80%;
+}
