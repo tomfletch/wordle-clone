@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.chart {
+  height: 20px;
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+}
+
+.leftBar,
+.rightBar {
+  height: 100%;
+}

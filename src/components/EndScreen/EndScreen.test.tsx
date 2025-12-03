@@ -46,4 +46,16 @@ describe("EndScreen", () => {
 
     expect(onPlayAgainFn).toHaveBeenCalledTimes(1);
   });
+
+  it("renders the charts", () => {
+    render(
+      <EndScreen
+        gameResult={{ didWin: true, attempts: 4 }}
+        onPlayAgain={() => {}}
+      />
+    );
+
+    expect(screen.getByText(/Wins/)).toBeInTheDocument();
+    expect(screen.getByText(/Losses/)).toBeInTheDocument();
+  });
 });
