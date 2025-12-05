@@ -4,6 +4,7 @@ import { defineConfig } from "vitest/config";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: "/wordle-clone/",
   test: {
     environment: "jsdom",
     setupFiles: "./test/setupTests.ts",
