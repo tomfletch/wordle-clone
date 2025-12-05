@@ -21,6 +21,8 @@ const FLIP_ANIMATION_DURATION =
 
 const JUMP_ANIMATION_DURATION = 2000;
 
+const GAME_END_DELAY_DURATION = 3000;
+
 type WordleGameProps = {
   onGameOver: (gameResult: GameResult) => void;
 };
@@ -32,8 +34,14 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
     onGameOverRef.current = onGameOver;
   }, [onGameOver]);
 
-  const { pastGuesses, activeGuessIndex, isGameOver, hasWon, submitGuess } =
-    useWordleGame({ maxGuesses: MAX_GUESSES });
+  const {
+    answer,
+    pastGuesses,
+    activeGuessIndex,
+    isGameOver,
+    hasWon,
+    submitGuess,
+  } = useWordleGame({ maxGuesses: MAX_GUESSES });
 
   const { isAnimating: isShaking, startAnimation: startShake } =
     useAnimationTimer(SHAKE_ANIMATION_DURATION);
@@ -43,6 +51,9 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
 
   const { isAnimating: isJumping, startAnimation: startJump } =
     useAnimationTimer(JUMP_ANIMATION_DURATION);
+
+  const { isAnimating: gameEndDelay, startAnimation: startGameEndDelay } =
+    useAnimationTimer(GAME_END_DELAY_DURATION);
 
   const canType = !isShaking && !isFlipping && !isJumping && !isGameOver;
 
@@ -60,21 +71,32 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
       startFlip(() => startJump());
     } else if (result === "valid") {
       clearActiveGuess();
-      startFlip();
+      startFlip(() => {
+        if (activeGuessIndex + 1 >= MAX_GUESSES) {
+          startGameEndDelay(() => {});
+        }
+      });
     } else {
       startShake();
     }
   });
 
   useEffect(() => {
-    if (isGameOver && !isJumping && !isFlipping) {
+    if (isGameOver && !isJumping && !isFlipping && !gameEndDelay) {
       const result: GameResult = hasWon
         ? { didWin: true, attempts: pastGuesses.length }
         : { didWin: false };
 
       onGameOverRef.current(result);
     }
-  }, [isGameOver, hasWon, pastGuesses.length, isJumping, isFlipping]);
+  }, [
+    isGameOver,
+    hasWon,
+    pastGuesses.length,
+    isJumping,
+    isFlipping,
+    gameEndDelay,
+  ]);
 
   const renderLine = (index: number) => {
     if (index < activeGuessIndex) {
@@ -111,6 +133,11 @@ export const WordleGame = ({ onGameOver }: WordleGameProps) => {
 
   return (
     <div className={styles.wordle}>
+      {isGameOver && !hasWon && !isFlipping && (
+        <div className={styles.answerContainer}>
+          <span className={styles.answer}>{answer}</span>
+        </div>
+      )}
       {Array.from({ length: MAX_GUESSES }, (_, index) => renderLine(index))}
       <Keyboard letterScores={letterScores} />
     </div>

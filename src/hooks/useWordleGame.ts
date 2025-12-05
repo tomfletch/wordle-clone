@@ -40,6 +40,7 @@ export const useWordleGame = ({ maxGuesses }: { maxGuesses: number }) => {
   };
 
   return {
+    answer,
     pastGuesses,
     activeGuessIndex,
     isGameOver,

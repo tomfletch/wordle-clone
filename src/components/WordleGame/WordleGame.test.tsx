@@ -196,4 +196,34 @@ describe("WordleGame", () => {
 
     expect(lines[0]).toHaveTextContent("hello");
   });
+
+  it("does not show the answer until the game is over", async () => {
+    const { user } = render(<WordleGame onGameOver={() => {}} />);
+
+    expect(screen.queryByText("zebra")).not.toBeInTheDocument();
+
+    // Make some incorrect guesses
+    const guesses = ["apple", "berry", "charm"];
+
+    for (const guess of guesses) {
+      await user.keyboard(guess);
+      await user.keyboard("{Enter}");
+      vi.runAllTimers();
+      expect(screen.queryByText("zebra")).not.toBeInTheDocument();
+    }
+
+    // Lose the game
+    const losingGuesses = ["delta", "eagle", "flame"];
+
+    for (const guess of losingGuesses) {
+      await user.keyboard(guess);
+      await user.keyboard("{Enter}");
+      vi.runAllTimers();
+    }
+
+    // Now the answer should be visible
+    await waitFor(() => {
+      expect(screen.getByText("zebra")).toBeInTheDocument();
+    });
+  });
 });
