@@ -22,17 +22,43 @@ export const EndScreen = ({
   gameResult: { didWin, attempts },
   onPlayAgain,
 }: EndScreenProps) => {
-  const { gamesWon, gamesLost, distribution } = useStats();
+  const {
+    gamesPlayed,
+    gamesWon,
+    gamesLost,
+    winRate,
+    averageGuesses,
+    distribution,
+  } = useStats();
 
   return (
     <div className={styles.endScreen}>
-      {didWin ? <WinMessage attempts={attempts} /> : <LoseMessage />}
-      <button onClick={() => onPlayAgain()}>Play Again</button>
-      <StackedBarChart
-        left={{ label: "Wins", barColour: "#6aaa64", value: gamesWon }}
-        right={{ label: "Losses", barColour: "#d9534f", value: gamesLost }}
-      />
-      <Chart data={distribution} />
+      <div className={styles.messagePanel}>
+        {didWin ? <WinMessage attempts={attempts} /> : <LoseMessage />}
+        <button onClick={() => onPlayAgain()}>Play Again</button>
+      </div>
+      <div className={styles.statsPanel}>
+        <div className={styles.statsSummary}>
+          <div className={styles.stat}>
+            <div className={styles.statLabel}>Games Played</div>
+            <div className={styles.statValue}>{gamesPlayed}</div>
+          </div>
+          <div className={styles.stat}>
+            <div className={styles.statLabel}>Win Rate</div>
+            <div className={styles.statValue}>{Math.round(winRate)}%</div>
+          </div>
+          <div className={styles.stat}>
+            <div className={styles.statLabel}>Average Guesses</div>
+            <div className={styles.statValue}>{averageGuesses.toFixed(1)}</div>
+          </div>
+        </div>
+        <StackedBarChart
+          left={{ label: "Wins", barColour: "#6aaa64", value: gamesWon }}
+          right={{ label: "Losses", barColour: "#d9534f", value: gamesLost }}
+        />
+        <h3>Attempt Distribution</h3>
+        <Chart data={distribution} />
+      </div>
     </div>
   );
 };

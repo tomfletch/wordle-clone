@@ -12,8 +12,8 @@ describe("StackedBarChart", () => {
       />
     );
 
-    expect(screen.getByText("Wins | 15")).toBeInTheDocument();
-    expect(screen.getByText("5 | Losses")).toBeInTheDocument();
+    expect(screen.getByText("15 Wins")).toBeInTheDocument();
+    expect(screen.getByText("5 Losses")).toBeInTheDocument();
 
     expect(screen.getByTestId("left-bar")).toHaveStyle("width: 75%");
     expect(screen.getByTestId("right-bar")).toHaveStyle("width: 25%");

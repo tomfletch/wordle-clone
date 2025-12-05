@@ -1,11 +1,53 @@
 .endScreen {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  align-items: stretch;
 }
 
 .endScreen h2,
 .endScreen p {
   margin: 0;
+}
+
+.endScreen h3 {
+  font-weight: normal;
+  margin: 0;
+}
+
+.messagePanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 2px solid rgb(255 255 255 / 0.3);
+}
+
+.statsPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.statsSummary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.stat:not(:last-child) {
+  border-right: 1px solid rgb(255 255 255 / 0.3);
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: bold;
 }

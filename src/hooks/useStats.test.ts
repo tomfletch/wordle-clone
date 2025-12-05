@@ -75,4 +75,41 @@ describe("useStats", () => {
       expect(result.current.distribution).toEqual(expected);
     });
   });
+
+  describe("winRate", () => {
+    it("calculates win rate correctly", () => {
+      const { result } = renderHook(() => useStats());
+      const { recordGameResult } = result.current;
+
+      act(() => recordGameResult({ didWin: true, attempts: 3 }));
+      expect(result.current.winRate).toBeCloseTo(100);
+
+      act(() => recordGameResult({ didWin: false }));
+      expect(result.current.winRate).toBeCloseTo(50);
+
+      act(() => recordGameResult({ didWin: true, attempts: 5 }));
+      expect(result.current.winRate).toBeCloseTo((2 / 3) * 100);
+    });
+  });
+
+  describe("averageGuesses", () => {
+    it("calculates average guesses correctly", () => {
+      const { result } = renderHook(() => useStats());
+      const { recordGameResult } = result.current;
+
+      act(() => recordGameResult({ didWin: true, attempts: 3 }));
+      expect(result.current.averageGuesses).toBeCloseTo(3);
+
+      act(() => recordGameResult({ didWin: true, attempts: 5 }));
+      expect(result.current.averageGuesses).toBeCloseTo(4);
+
+      act(() => recordGameResult({ didWin: true, attempts: 2 }));
+      expect(result.current.averageGuesses).toBeCloseTo((3 + 5 + 2) / 3);
+    });
+
+    it("returns 0 if no games won", () => {
+      const { result } = renderHook(() => useStats());
+      expect(result.current.averageGuesses).toBe(0);
+    });
+  });
 });

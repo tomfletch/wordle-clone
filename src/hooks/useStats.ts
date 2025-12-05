@@ -40,10 +40,22 @@ export const useStats = () => {
     }));
   };
 
+  const winRate = stats.gamesPlayed
+    ? (stats.gamesWon / stats.gamesPlayed) * 100
+    : 0;
+
+  const averageGuesses = stats.gamesWon
+    ? Object.entries(stats.distribution).reduce((sum, [attempts, count]) => {
+        return sum + Number(attempts) * count;
+      }, 0) / stats.gamesWon
+    : 0;
+
   return {
     gamesPlayed: stats.gamesPlayed,
     gamesWon: stats.gamesWon,
     gamesLost: stats.gamesPlayed - stats.gamesWon,
+    winRate,
+    averageGuesses,
     distribution: stats.distribution,
     recordGameResult,
   };

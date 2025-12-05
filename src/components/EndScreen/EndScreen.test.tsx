@@ -47,6 +47,19 @@ describe("EndScreen", () => {
     expect(onPlayAgainFn).toHaveBeenCalledTimes(1);
   });
 
+  it("displays correct statistics", () => {
+    render(
+      <EndScreen
+        gameResult={{ didWin: true, attempts: 4 }}
+        onPlayAgain={() => {}}
+      />
+    );
+
+    expect(screen.getByText("Games Played")).toBeInTheDocument();
+    expect(screen.getByText("Win Rate")).toBeInTheDocument();
+    expect(screen.getByText("Average Guesses")).toBeInTheDocument();
+  });
+
   it("renders the charts", () => {
     render(
       <EndScreen

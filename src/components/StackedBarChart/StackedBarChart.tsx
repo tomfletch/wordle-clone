@@ -19,7 +19,7 @@ export const StackedBarChart = ({ left, right }: StackedBarChartProps) => {
   return (
     <div className={styles.container}>
       <div>
-        {left.label} | {left.value}
+        {left.value} {left.label}
       </div>
       <div className={styles.chart}>
         <div
@@ -34,7 +34,7 @@ export const StackedBarChart = ({ left, right }: StackedBarChartProps) => {
         />
       </div>
       <div>
-        {right.value} | {right.label}
+        {right.value} {right.label}
       </div>
     </div>
   );
